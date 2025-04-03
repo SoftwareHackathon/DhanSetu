@@ -1,0 +1,42 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:background="@android:color/white"
+    android:layout_marginBottom="8dp">
+
+    <TextView
+        android:id="@+id/totalAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total Amount: ₹"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:id="@+id/splitAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Splitted Amount: ₹"
+        android:textSize="14sp"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:id="@+id/friendName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Friend Name: "
+        android:textSize="14sp"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:id="@+id/friendPhone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Friend Phone: "
+        android:textSize="14sp"
+        android:textColor="@android:color/black" />
+
+</LinearLayout>

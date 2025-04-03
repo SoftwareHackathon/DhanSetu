@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Hackathon</string>
+    <string name="accessibility_description">USSD Service to capture responses</string>
+</resources>

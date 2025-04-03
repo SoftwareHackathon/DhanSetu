@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Total Amount Input -->
+    <EditText
+        android:id="@+id/et_total_amount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Total Amount"
+        android:inputType="numberDecimal"/>
+
+    <!-- Friend Name Input -->
+    <EditText
+        android:id="@+id/et_friend_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Friend's Name"/>
+
+    <!-- Friend Phone Number Input -->
+    <EditText
+        android:id="@+id/et_friend_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Friend's Phone Number"
+        android:inputType="phone"/>
+
+    <!-- Amount to Split Input -->
+    <EditText
+        android:id="@+id/et_split_amount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Amount to Split"
+        android:inputType="numberDecimal"/>
+
+    <!-- Split Button -->
+    <Button
+        android:id="@+id/btn_split"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Split Money"
+        android:layout_marginTop="10dp"/>
+
+    <!-- View Pending Splits Button -->
+    <Button
+        android:id="@+id/btn_view_splits"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="View Pending Splits"
+        android:layout_marginTop="10dp"/>
+
+    <!-- RecyclerView for Split Transactions -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_splits"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"/>
+
+</LinearLayout>

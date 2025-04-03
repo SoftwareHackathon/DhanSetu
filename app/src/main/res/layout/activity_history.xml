@@ -1,0 +1,47 @@
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    android:orientation="vertical"-->
+<!--    android:padding="16dp">-->
+
+<!--    &lt;!&ndash; TextView to display history &ndash;&gt;-->
+<!--    <ScrollView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_weight="1"-->
+<!--        android:padding="8dp">-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/historyView"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="No history available"-->
+<!--            android:textSize="16sp"-->
+<!--            android:padding="8dp"-->
+<!--            android:background="@android:color/darker_gray"-->
+<!--            android:textColor="@android:color/white" />-->
+<!--    </ScrollView>-->
+
+<!--    &lt;!&ndash; Pay Back Button &ndash;&gt;-->
+<!--    <Button-->
+<!--        android:id="@+id/payBackButton"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Mark as Paid"-->
+<!--        android:background="@android:color/holo_blue_dark"-->
+<!--        android:textColor="@android:color/white"-->
+<!--        android:padding="12dp" />-->
+
+<!--</LinearLayout>-->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>
