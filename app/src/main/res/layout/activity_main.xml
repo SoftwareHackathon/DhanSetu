@@ -1,109 +1,176 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="20dp"
-    android:gravity="center">
+    android:background="@color/white"
+    android:padding="16dp">
 
-    <TextView
-        android:id="@+id/titleText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="UPI Money Transfer"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:textColor="#000000"
-        android:layout_marginBottom="25dp"/>
-
-    <Button
-        android:id="@+id/sendMoneyButton"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Send Money"
-        android:backgroundTint="#4CAF50"
-        android:textColor="#FFFFFF"
-        android:padding="12dp"
-        android:layout_marginBottom="10dp"
-        android:onClick="sendMoney"/>
+        android:layout_height="wrap_content">
 
+        <!-- Dhansetu Logo at the Top -->
+        <ImageView
+            android:id="@+id/dhansetuLogo"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="16dp"
+            android:src="@drawable/dhansetu_logo"
+            android:contentDescription="Dhansetu Logo"
+            android:scaleType="fitCenter" />
 
-    <Button
-        android:id="@+id/checkBalanceButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Check Balance"
-        android:backgroundTint="#FF9800"
-        android:textColor="#FFFFFF"
-        android:padding="12dp"
-        android:layout_marginBottom="10dp"
-        android:onClick="checkBalance"/>
+        <!-- Grid Layout for Buttons -->
+        <GridLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/dhansetuLogo"
+            android:layout_centerHorizontal="true"
+            android:columnCount="2"
+            android:rowCount="2"
+            android:alignmentMode="alignMargins"
+            android:padding="20dp">
 
-    <Button
-        android:id="@+id/showTransactionButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Show Transactions"
-        android:backgroundTint="#3F51B5"
-        android:textColor="#FFFFFF"
-        android:padding="12dp"
-        android:layout_marginBottom="10dp"
-        android:onClick="showTransaction"/>
+            <!-- Check Balance -->
+            <LinearLayout
+                android:id="@+id/checkBalanceButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_margin="24dp"
+                android:clickable="true"
+                android:focusable="true">
 
+                <FrameLayout
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:background="@drawable/rounded_black_box"
+                    android:gravity="center">
 
+                    <ImageView
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:src="@drawable/ic_check_balance" />
+                </FrameLayout>
 
-    <TextView
-        android:id="@+id/historyTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Transaction History:"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:textColor="#000000"
-        android:visibility="gone"
-        android:layout_marginTop="20dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Check Balance"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
 
-    <TextView
-        android:id="@+id/historyTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="No transactions found"
-        android:textSize="16sp"
-        android:textColor="#666666"
-        android:visibility="gone"
-        android:padding="10dp"
-        android:background="#FFFFFF"
-        android:elevation="2dp"/>
+            <!-- Send Money -->
+            <LinearLayout
+                android:id="@+id/sendMoneyButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_margin="24dp"
+                android:clickable="true"
+                android:focusable="true">
 
-    <!-- Button to Trigger USSD -->
-    <Button
-        android:id="@+id/ussdButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Trigger USSD"
-        android:onClick="triggerUSSD"/>
+                <FrameLayout
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:background="@drawable/rounded_black_box"
+                    android:gravity="center">
 
-    <!-- Button to View History -->
-    <Button
-        android:id="@+id/viewSplitHistoryButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="View Split History" />
+                    <ImageView
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:src="@drawable/ic_send_money" />
+                </FrameLayout>
 
-    <!-- New Button to Split Money -->
-    <Button
-        android:id="@+id/splitButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Split Money" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Send Money"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
 
-    <Button
-        android:id="@+id/viewTransHistoryButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="View History"
-        android:layout_gravity="center"
-        android:padding="10dp"/>
+            <!-- Transactions -->
+            <LinearLayout
+                android:id="@+id/viewTransHistoryButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_margin="24dp"
+                android:clickable="true"
+                android:focusable="true">
 
-</LinearLayout>
+                <FrameLayout
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:background="@drawable/rounded_black_box"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:src="@drawable/ic_transactions" />
+                </FrameLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Transactions"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+
+            <!-- Shared Expenses -->
+            <LinearLayout
+                android:id="@+id/sharedExpensesButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_margin="24dp"
+                android:clickable="true"
+                android:focusable="true">
+
+                <FrameLayout
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:background="@drawable/rounded_black_box"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:src="@drawable/ic_shared_expenses" />
+                </FrameLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Shared Expenses"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnSync"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sync"
+                android:layout_margin="16dp"
+                android:textColor="@android:color/white"
+                android:layout_gravity="center" />
+        </GridLayout>
+    </RelativeLayout>
+</ScrollView>

@@ -1,40 +1,32 @@
 package com.example.hackathon;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.SurfaceControl;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.sql.Date;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
@@ -48,24 +40,50 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // Get references to icon buttons
+        LinearLayout checkBalanceButton = findViewById(R.id.checkBalanceButton);
+        LinearLayout sendMoneyButton = findViewById(R.id.sendMoneyButton);
+        LinearLayout transactionsButton = findViewById(R.id.viewTransHistoryButton);
+        LinearLayout splitExpensesButton = findViewById(R.id.sharedExpensesButton);
+        // Set Click Listeners
+        checkBalanceButton.setOnClickListener(v -> checkBalance(v));
+        sendMoneyButton.setOnClickListener(v -> sendMoney(v));
+        transactionsButton.setOnClickListener(v -> showTransaction(v));
+        splitExpensesButton.setOnClickListener(v -> split(v));
+
         dbHelper = new USSDDatabaseHelper(this);
 //        listView = findViewById(R.id.listView);
-        Button splitButton = findViewById(R.id.splitButton);
-        splitButton.setOnClickListener(v -> showSplitDialog());
 
-        Button viewSplitHistoryButton = findViewById(R.id.viewSplitHistoryButton);
-        viewSplitHistoryButton.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, HistoryActivity.class);
-            startActivity(intent);
-        });
 
-        Button viewTransHistoryButton = findViewById(R.id.viewTransHistoryButton);
+
+        LinearLayout viewTransHistoryButton = findViewById(R.id.viewTransHistoryButton);
         viewTransHistoryButton.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, TransHistory.class);
             startActivity(intent);
         });
 
         loadTransactionsFromCSV();  // Load data in background
+
+//        // Schedule periodic sync every 1 minutes
+//        PeriodicWorkRequest syncWorkRequest = new PeriodicWorkRequest.Builder(
+//                FirebaseSyncWorker.class,
+//                15, TimeUnit.MINUTES) // Set interval (minimum 15 min)
+//                .build();
+//
+//        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+//                "FirebaseSync",
+//                ExistingPeriodicWorkPolicy.KEEP, // Prevents duplicate work
+//                syncWorkRequest
+//        );
+
+        Button syncButton = findViewById(R.id.btnSync);
+        syncButton.setOnClickListener(v -> {
+            WorkManager.getInstance(this).enqueue(
+                    new OneTimeWorkRequest.Builder(FirebaseSyncWorker.class).build()
+            );
+        });
+
+
     }
 
     /** 🔹 Load CSV transactions (Runs in Background) */
@@ -92,17 +110,17 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     String[] values = line.split(",");
-                    if (values.length < 6) {
+                    if (values.length < 5) {
                         Log.e("CSV Import", "Skipping malformed line: " + line);
                         continue;
                     }
 
-                    int _id = Integer.parseInt(values[0].trim());
-                    double amount = Double.parseDouble(values[1].trim());
-                    String sender = values[2].trim();
-                    String receiver = values[3].trim();
-                    String date = values[4].trim();
-                    String description = values[5].trim();
+//                    int _id = Integer.parseInt(values[0].trim());
+                    double amount = Double.parseDouble(values[0].trim());
+                    String sender = values[1].trim();
+                    String receiver = values[2].trim();
+                    String date = values[3].trim();
+                    String description = values[4].trim();
 
                     // Validate and format date if needed
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
@@ -116,8 +134,8 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
 
-                    db.execSQL("INSERT INTO transactions (_id,amount, sender, receiver, date, description) VALUES (?,?, ?, ?, ?, ?)",
-                            new Object[]{_id,amount, sender, receiver, date, description});
+                    db.execSQL("INSERT INTO transactions (amount, sender, receiver, date, description) VALUES (?, ?, ?, ?, ?)",
+                            new Object[]{amount, sender, receiver, date, description});
 
                     Log.d("CSV Import", "Inserted transaction: " + line);
                 }
@@ -145,61 +163,19 @@ public class MainActivity extends AppCompatActivity {
 
 
     /** 🔹 Split Money Dialog */
-    private void showSplitDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Split Money");
 
-        LinearLayout layout = new LinearLayout(this);
-        layout.setOrientation(LinearLayout.VERTICAL);
-
-        EditText totalAmountInput = new EditText(this);
-        totalAmountInput.setHint("Total Amount");
-        layout.addView(totalAmountInput);
-
-        EditText splitAmountInput = new EditText(this);
-        splitAmountInput.setHint("Amount to Split");
-        layout.addView(splitAmountInput);
-
-        EditText friendNameInput = new EditText(this);
-        friendNameInput.setHint("Friend's Name");
-        layout.addView(friendNameInput);
-
-        EditText friendPhoneInput = new EditText(this);
-        friendPhoneInput.setHint("Friend's Phone");
-        layout.addView(friendPhoneInput);
-
-        builder.setView(layout);
-
-        builder.setPositiveButton("Save", (dialog, which) -> {
-            try {
-                double totalAmount = Double.parseDouble(totalAmountInput.getText().toString().trim());
-                double splitAmount = Double.parseDouble(splitAmountInput.getText().toString().trim());
-                String friendName = friendNameInput.getText().toString().trim();
-                String friendPhone = friendPhoneInput.getText().toString().trim();
-
-                if (friendName.isEmpty() || friendPhone.isEmpty()) {
-                    Toast.makeText(this, "Please enter all details!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                dbHelper.insertSplitTransaction(totalAmount, splitAmount, friendName, friendPhone);
-                Toast.makeText(this, "Split saved!", Toast.LENGTH_SHORT).show();
-            } catch (Exception e) {
-                Toast.makeText(this, "Invalid input. Try again!", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
-        builder.show();
-    }
 
     /** 🔹 USSD Handling */
-    private void triggerUSSD(String ussdCode) {
+    private void triggerUSSD(View view,String ussdCode) {
         String encodedUssd = Uri.encode(ussdCode);
         Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + encodedUssd));
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-            startActivity(intent);
+            try {
+                startActivity(intent);
+            } catch (Exception e) {
+                Snackbar.make(view, "USSD request failed. Try again.", Snackbar.LENGTH_LONG).show();
+            }
         } else {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CALL_PERMISSION);
         }
@@ -221,18 +197,26 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+    public void split(View view) {
+
+
+            Intent intent = new Intent(this, SharedExpenses.class);
+            startActivity(intent);
+
+
+    }
 
     /** 🔹 USSD Shortcuts */
     public void sendMoney(View view) {
-        triggerUSSD("*99*1#");  // Send Money USSD Code
+        triggerUSSD(view,"*99*1#");  // Send Money USSD Code
     }
 
     public void checkBalance(View view) {
-        triggerUSSD("*99*3#");  // Check Balance USSD Code
+        triggerUSSD(view,"*99*3#");  // Check Balance USSD Code
     }
 
     public void showTransaction(View view) {
-        triggerUSSD("*99*6#");  // Show Transaction History USSD Code
+        triggerUSSD(view,"*99*6#");  // Show Transaction History USSD Code
     }
 }
 

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="20dp"
+    android:background="#FFFFFF"> <!-- Optional: White background for contrast -->
+
+    <Button
+        android:id="@+id/viewSplitHistoryButton"
+        android:layout_width="350dp"
+        android:layout_height="100dp"
+        android:text="View Split History"
+        android:textSize="18sp"
+        android:textColor="#000000"
+        android:backgroundTint="#d6c058"
+        android:padding="15dp" />
+
+    <Button
+        android:id="@+id/splitButton"
+        android:layout_width="350dp"
+        android:layout_height="100dp"
+        android:text="Split Money"
+        android:textSize="18sp"
+        android:textColor="#000000"
+        android:backgroundTint="#d6c058"
+        android:padding="15dp"
+        android:layout_marginTop="20dp" />
+</LinearLayout>

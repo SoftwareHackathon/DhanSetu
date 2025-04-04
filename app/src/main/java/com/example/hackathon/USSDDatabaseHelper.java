@@ -12,7 +12,7 @@ import java.util.List;
 
 public class USSDDatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "ussd_transactions.db";
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 8;
 
     private static final String SPLIT_TABLE = "split_transactions";
     private static final String SPLIT_ID = "_id";
@@ -31,6 +31,17 @@ public class USSDDatabaseHelper extends SQLiteOpenHelper {
     private static final String DESCRIPTION="description";
     private static final String TRANSACTION_RECEIVER_P = "receiver";
     private static final String TRANSACTION_DATE = "date";
+    // NEW: User credentials table for offline login
+    private static final String USERS_TABLE = "users";
+    private static final String USER_PHONE = "phone";
+    private static final String USER_PASSWORD = "password";
+    private static final String USER_FIRST_NAME = "first_name";
+    private static final String USER_LAST_NAME = "last_name";
+    private static final String USER_ACCOUNT_NUMBER = "account_number";
+
+
+
+
 
     public USSDDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -75,8 +86,20 @@ public Cursor getAllTransactions() {
                 TRANSACTION_RECEIVER_P + " TEXT, " +
                 DESCRIPTION + " TEXT, " +
                 TRANSACTION_DATE + " TEXT)";
+
+
+        String CREATE_USERS_TABLE = "CREATE TABLE IF NOT EXISTS " + USERS_TABLE + " (" +
+                USER_PHONE + " TEXT PRIMARY KEY, " +
+                USER_PASSWORD + " TEXT, " +
+                USER_FIRST_NAME + " TEXT, " +
+                USER_LAST_NAME + " TEXT, " +
+                USER_ACCOUNT_NUMBER + " TEXT)";
         db.execSQL(CREATE_SPLIT_TABLE);
         db.execSQL(CREATE_TRANSACTION_TABLE);
+        db.execSQL(CREATE_USERS_TABLE);
+
+
+
     }
 
     @Override
@@ -90,16 +113,24 @@ public Cursor getAllTransactions() {
 //            // Future changes: Add more columns or tables
 //        }
 
-        db.execSQL("DROP TABLE IF EXISTS transactions");
-        // Recreate table with new schema
-        onCreate(db);
-    }
 
-    public void deleteTransaction(String _id) {
+        db.execSQL("DROP TABLE IF EXISTS transactions");
+        db.execSQL("DROP TABLE IF EXISTS users"); // recreate users table
+        onCreate(db);
+        // Recreate table with new schema
+
+    }
+    public void deleteOldTransactions() {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TRANSACTIONS_TABLE, TRANSACTION_ID + "=?", new String[]{_id});
+
+        // Keep transactions from the last 30 days only
+        String query = "DELETE FROM transactions WHERE date < date('now', '-30 days')";
+        db.execSQL(query);
         db.close();
     }
+
+
+
 
     public List<Transaction> getAllTransits() {
         List<Transaction> transactionList = new ArrayList<>();
@@ -137,17 +168,30 @@ public Cursor getAllTransactions() {
         db.close();
     }
 
+    // New: Store user credentials locally
+    public void insertUser(String phone, String password, String firstName, String lastName, String accountNumber) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(USER_PHONE, phone);
+        values.put(USER_PASSWORD, password);
+        values.put(USER_FIRST_NAME, firstName);
+        values.put(USER_LAST_NAME, lastName);
+        values.put(USER_ACCOUNT_NUMBER, accountNumber);
+        db.insertWithOnConflict(USERS_TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+        db.close();
+    }
+
+    // New: Validate user login offline
+    public boolean validateOfflineLogin(String phone, String password) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + USERS_TABLE + " WHERE phone = ? AND password = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{phone, password});
+        boolean isValid = cursor.moveToFirst();
+        cursor.close();
+        db.close();
+        return isValid;
+    }
 
 
 
-//    public void insertUSSDResponse(String response) {
-//        SQLiteDatabase db = this.getWritableDatabase();
-//        ContentValues values = new ContentValues();
-//        values.put("response", response);  // Make sure the column exists in the table
-//
-//        db.insert("ussd_responses", null, values);
-//        db.close();
-//
-//
-//    }
 }

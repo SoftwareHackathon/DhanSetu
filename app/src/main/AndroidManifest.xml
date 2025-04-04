@@ -5,19 +5,19 @@
     <!-- Permissions for Calling & Accessibility -->
     <uses-permission android:name="android.permission.CALL_PHONE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.CALL_PRIVILEGED" tools:ignore="ProtectedPermissions" />
 
     <application
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         android:label="Offline UPI Transaction">
 
-        <!-- USSD Accessibility Service (Move inside application) -->
+        <!-- USSD Accessibility Service -->
         <service
             android:name=".USSDService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
@@ -31,9 +31,8 @@
                 android:resource="@xml/accessibility_service_config"/>
         </service>
 
-
-        <!-- Main Activity -->
-        <activity android:name=".MainActivity"
+        <!-- Set Login Page as First Screen -->
+        <activity android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -41,16 +40,35 @@
             </intent-filter>
         </activity>
 
-<!--         History Activity (if not added)-->
-        <activity android:name=".HistoryActivity"
+        <!-- Main Activity (Shown After Login) -->
+        <activity android:name=".MainActivity"
+            android:exported="false"/>
+
+        <!-- Other Activities -->
+        <activity android:name=".SplitActivity"
             android:exported="false"/>
 
         <activity android:name=".TransHistory"
             android:exported="false"/>
 
+        <activity android:name=".CreateAccount"
+            android:exported="false"/>
+
+        <activity android:name=".SplitMoney"
+            android:exported="false"/>
 
 
+        <activity android:name=".SharedExpenses"
+            android:exported="false"/>
+
+        <!-- Uncomment Network Receiver if Needed -->
+        <!--
+        <receiver android:name=".NetworkReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+            </intent-filter>
+        </receiver>
+        -->
 
     </application>
-
 </manifest>
