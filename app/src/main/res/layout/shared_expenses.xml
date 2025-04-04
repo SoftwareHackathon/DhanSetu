@@ -13,8 +13,8 @@
         android:layout_height="100dp"
         android:text="View Split History"
         android:textSize="18sp"
-        android:textColor="#000000"
-        android:backgroundTint="#d6c058"
+        android:textColor="#ffffff"
+        android:backgroundTint="#000000"
         android:padding="15dp" />
 
     <Button
@@ -23,8 +23,8 @@
         android:layout_height="100dp"
         android:text="Split Money"
         android:textSize="18sp"
-        android:textColor="#000000"
-        android:backgroundTint="#d6c058"
+        android:textColor="#ffffff"
+        android:backgroundTint="#000000"
         android:padding="15dp"
         android:layout_marginTop="20dp" />
 </LinearLayout>
