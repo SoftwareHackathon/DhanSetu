@@ -9,11 +9,11 @@
     <!-- Larger Image above text boxes -->
     <ImageView
         android:id="@+id/img_logo"
-        android:layout_width="200dp"
+        android:layout_width="259dp"
         android:layout_height="200dp"
-        android:src="@drawable/img"
         android:layout_marginBottom="20dp"
-        android:scaleType="fitCenter" />
+        android:scaleType="fitCenter"
+        android:src="@drawable/img" />
 
     <!-- Heading -->
     <TextView
