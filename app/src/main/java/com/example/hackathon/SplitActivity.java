@@ -20,9 +20,18 @@ public class SplitActivity extends AppCompatActivity {
 
         listView = findViewById(R.id.listView);
         dbHelper = new USSDDatabaseHelper(this);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
 
         loadSplitHistory();
     }
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed(); // or finish();
+        return true;
+    }
+
 
     private void loadSplitHistory() {
         Cursor cursor = dbHelper.getAllSplitTransactions();

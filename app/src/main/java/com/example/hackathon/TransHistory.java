@@ -20,12 +20,22 @@ public class TransHistory extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.transaction_listview);  // ✅ Set correct XML layout
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
 
         dbHelper = new USSDDatabaseHelper(this);
         listView = findViewById(R.id.transactionListView); // ✅ Initialize ListView here
 
         loadTransactionHistory();
     }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed(); // or finish();
+        return true;
+    }
+
 
     private void loadTransactionHistory() {
         Log.d("how","are you");

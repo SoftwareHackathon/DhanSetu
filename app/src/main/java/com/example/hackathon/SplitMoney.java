@@ -23,6 +23,9 @@ public class SplitMoney extends AppCompatActivity {
         Log.d("aa","gye");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.split_money);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
 
         dbHelper = new USSDDatabaseHelper(this);
 
@@ -56,6 +59,12 @@ public class SplitMoney extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed(); // or finish();
+        return true;
+    }
+
     private boolean validateInputs() {
         String totalAmount = totalAmountEditText.getText().toString().trim();
         String amountToSplit = amountToSplitEditText.getText().toString().trim();
@@ -79,6 +88,29 @@ public class SplitMoney extends AppCompatActivity {
 
         if (friendPhone.isEmpty()) {
             friendPhoneEditText.setError("Please enter friend's phone");
+            return false;
+        }
+        // Check if phone is 10-digit numeric
+        if (!friendPhone.matches("\\d{10}")) {
+            friendPhoneEditText.setError("Phone number must be exactly 10 digits");
+            return false;
+        }
+
+        try {
+            double totAmt = Double.parseDouble(totalAmount);
+            double splitAmount = Double.parseDouble(amountToSplit);
+            if (totAmt <= 0) {
+                totalAmountEditText.setError("Amount must be greater than 0");
+                return false;
+            }
+
+            if (splitAmount <= 0) {
+                amountToSplitEditText.setError("Amount must be greater than 0");
+                return false;
+            }
+
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "Invalid numeric input", Toast.LENGTH_SHORT).show();
             return false;
         }
 

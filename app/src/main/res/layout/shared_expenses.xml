@@ -1,30 +1,58 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:padding="20dp"
-    android:background="#FFFFFF"> <!-- Optional: White background for contrast -->
+    android:padding="24dp"
+    android:background="@android:color/white">
 
+    <!-- Heading -->
+
+    <!-- App Logo or Icon -->
+
+    <TextView
+        android:id="@+id/headingText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center"
+        android:text="Shared Expenses"
+        android:textColor="#D6C058"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/appLogo"
+        android:layout_width="452dp"
+        android:layout_height="356dp"
+        android:layout_marginBottom="48dp"
+        android:contentDescription="App Logo"
+        android:src="@drawable/sharedexpense" />
+
+    <!-- View Split History Button -->
     <Button
         android:id="@+id/viewSplitHistoryButton"
-        android:layout_width="350dp"
-        android:layout_height="100dp"
-        android:text="View Split History"
-        android:textSize="18sp"
-        android:textColor="#ffffff"
-        android:backgroundTint="#000000"
-        android:padding="15dp" />
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="#D6C058"
+        android:text="VIEW SPLIT HISTORY"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:paddingVertical="12dp" />
 
+    <!-- Split Money Button -->
     <Button
         android:id="@+id/splitButton"
-        android:layout_width="350dp"
-        android:layout_height="100dp"
-        android:text="Split Money"
-        android:textSize="18sp"
-        android:textColor="#ffffff"
-        android:backgroundTint="#000000"
-        android:padding="15dp"
-        android:layout_marginTop="20dp" />
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="#D6C058"
+        android:text="SPLIT MONEY"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:paddingVertical="12dp" />
+
 </LinearLayout>

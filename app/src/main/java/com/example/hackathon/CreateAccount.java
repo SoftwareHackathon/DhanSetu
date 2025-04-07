@@ -3,10 +3,12 @@ package com.example.hackathon;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.method.LinkMovementMethod;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,8 +26,7 @@ public class CreateAccount extends AppCompatActivity {
     private Spinner spinner_account_type;
     private CheckBox checkbox_terms;
 
-    USSDDatabaseHelper
- dbHelper;
+    USSDDatabaseHelper dbHelper;
     DatabaseReference usersRef;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,10 @@ public class CreateAccount extends AppCompatActivity {
         firstNameEditText = findViewById(R.id.et_first_name);
         lastNameEditText = findViewById(R.id.et_last_name);
         accountNumberEditText = findViewById(R.id.et_account_number);
-        spinner_account_type = findViewById(R.id.spinner_account_type);
+
+        TextView text=findViewById(R.id.text_terms_links);
+        text.setMovementMethod(LinkMovementMethod.getInstance());
+
         checkbox_terms = findViewById(R.id.checkbox_terms);
         signUpButton = findViewById(R.id.btn_create_account);
 
@@ -47,7 +51,16 @@ public class CreateAccount extends AppCompatActivity {
         usersRef = FirebaseDatabase.getInstance().getReference("users");
 
         signUpButton.setOnClickListener(v -> registerUser());
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed(); // or finish();
+        return true;
     }
 
     private void registerUser() {
@@ -64,11 +77,30 @@ public class CreateAccount extends AppCompatActivity {
             Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show();
             return;
         }
+        // Phone number validation (numeric and 10 digits)
+        if (!phone.matches("\\d{10}")) {
+            Toast.makeText(this, "Phone number must be exactly 10 digits", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
+        // Account number validation (numeric and 12 digits)
+        if (!accountNumber.matches("\\d{12}")) {
+            Toast.makeText(this, "Account number must be exactly 12 digits", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Password strength check (min 8 chars, at least 1 letter, 1 number, and 1 special char @, $, _)
+        if (!password.matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$_])[A-Za-z\\d@$_]{8,}$")) {
+            Toast.makeText(this, "Password must be 8+ chars, with 1 letter, 1 number, and 1 special char (@, $, _)", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        // Password match check
         if (!password.equals(confirmPassword)) {
             Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show();
             return;
         }
+
 
         // Firebase Upload
         HashMap<String, Object> userData = new HashMap<>();

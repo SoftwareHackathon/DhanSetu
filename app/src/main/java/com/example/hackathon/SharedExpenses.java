@@ -13,6 +13,9 @@ public class SharedExpenses extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shared_expenses);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
 
         // Get references to buttons
         Button viewSplitHistoryButton = findViewById(R.id.viewSplitHistoryButton);
@@ -27,6 +30,7 @@ public class SharedExpenses extends AppCompatActivity {
             }
         });
 
+
         splitMoneyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -39,5 +43,12 @@ public class SharedExpenses extends AppCompatActivity {
         });
 
 
+
     }
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed(); // or finish();
+        return true;
+    }
+
 }

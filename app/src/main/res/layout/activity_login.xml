@@ -73,7 +73,7 @@
         android:layout_marginTop="10dp"
         android:textColor="@android:color/white"
         android:textSize="18sp"
-        android:background="@drawable/button_border"/>
+        android:background="@drawable/button_border3"/>
 
     <!-- Sign-up Text -->
     <TextView
